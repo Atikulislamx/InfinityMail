@@ -17,7 +17,7 @@ banner_text.append(r"""
 |_| |_|\__,_|\___|_|\_\___|_|     |_|  |_|\__,_|_|_|___/
 """, style="bold red")
 
-console.print(Panel(banner_text, subtitle="HackerMail CLI v1.0", expand=False))
+console.print(Panel(banner_text, subtitle="HackerMail CLI v2.0", expand=False))
 
 # CLI input
 sender_name = console.input("[bold cyan]Sender Name:[/bold cyan] ")
@@ -36,19 +36,22 @@ while True:
     lines.append(line)
 body = "\n".join(lines)
 
-# Create message
+# Create MIME message
 msg = MIMEMultipart()
+# From header: maximum visibility
 msg['From'] = f"{sender_name} <{sender_email}>"
 msg['To'] = receiver_email
 msg['Subject'] = subject
 msg.attach(MIMEText(body, 'html'))
 
 try:
+    # Gmail SMTP
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(sender_email, sender_password)
     server.send_message(msg)
     server.quit()
     console.print(f"[bold green]Email sent successfully to {receiver_email}![/bold green]")
+    console.print("[bold cyan]Note:[/bold cyan] Inbox may override sender name depending on email client settings.")
 except Exception as e:
     console.print(f"[bold red]Failed to send email:[/bold red] {str(e)}")
