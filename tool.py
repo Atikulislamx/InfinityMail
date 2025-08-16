@@ -4,21 +4,86 @@ from email.mime.text import MIMEText
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+import random
 
 console = Console()
 
-# Hacker-style banner
-banner_text = Text()
-banner_text.append(r"""
- _   _            _                __  __       _ _     
-| | | | __ _  ___| | _____ _ __   |  \/  | __ _(_) |___ 
-| |_| |/ _` |/ __| |/ / _ \ '__|  | |\/| |/ _` | | / __|
-|  _  | (_| | (__|   <  __/ |     | |  | | (_| | | \__ \
-|_| |_|\__,_|\___|_|\_\___|_|     |_|  |_|\__,_|_|_|___/
-""", style="bold red")
+# List of banners with corresponding subtitles
+banners_with_subtitles = [
+    {
+        "banner": r"""
+███████╗███╗   ██╗███████╗███████╗███╗   ██╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝████╗  ██║██╔════╝██╔════╝████╗  ██║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+█████╗  ██╔██╗ ██║█████╗  █████╗  ██╔██╗ ██║███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔══╝  ██║╚██╗██║██╔══╝  ██╔══╝  ██║╚██╗██║██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+███████╗██║ ╚████║███████╗███████╗██║ ╚████║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚══════╝╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+""",
+        "subtitle": "By Atikul Islam Rabbi | Cyber Infinity"
+    },
+    {
+        "banner": r"""
+░█▀▀▀ ░█▀▀▀█ ░█▀▀█ ░█▀▀█ ░█▀▀▀█ ▀▀█▀▀ ░█▀▀█ 
+░█▀▀▀ ░█──░█ ░█▀▀▄ ░█─── ░█──░█ ─░█── ░█▄▄▀ 
+░█▄▄▄ ░█▄▄▄█ ░█▄▄█ ░█▄▄█ ░█▄▄▄█ ─░█── ░█─░█
+""",
+        "subtitle": "Developed by Atikul Islam Rabbi"
+    },
+    {
+        "banner": r"""
+╔═╗╔═╗╦  ╦╔═╗╔═╗╔═╗
+║  ║ ║║  ║╠═╝║ ║║ ╦
+╚═╝╚═╝╩═╝╩╩  ╚═╝╚═╝
+""",
+        "subtitle": "Cyber Infinity Presents: GhostMail"
+    },
+    {
+        "banner": r"""
+█████╗ ██╗      ██████╗ ██╗   ██╗███████╗
+██╔══██╗██║     ██╔═══██╗██║   ██║██╔════╝
+███████║██║     ██║   ██║██║   ██║█████╗  
+██╔══██║██║     ██║   ██║╚██╗ ██╔╝██╔══╝  
+██║  ██║███████╗╚██████╔╝ ╚████╔╝ ███████╗
+╚═╝  ╚═╝╚══════╝ ╚═════╝   ╚═══╝  ╚══════╝
+""",
+        "subtitle": "Encrypted Mailer | Atikul Islam Rabbi"
+    },
+    {
+        "banner": r"""
+██╗  ██╗ █████╗ ██████╗ ██╗███╗   ██╗ ██████╗ 
+██║  ██║██╔══██╗██╔══██╗██║████╗  ██║██╔═══██╗
+███████║███████║██████╔╝██║██╔██╗ ██║██║   ██║
+██╔══██║██╔══██║██╔═══╝ ██║██║╚██╗██║██║   ██║
+██║  ██║██║  ██║██║     ██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═══╝ ╚═════╝
+""",
+        "subtitle": "Phantom Mail by Cyber Infinity"
+    }
+]
 
-console.print(Panel(banner_text, subtitle="HackerMail CLI v2.0", expand=False))
+# Function to apply glitch effect
+def glitch_banner(banner_text, glitch_prob=0.08):
+    glitch_chars = ['░','▒','▓','█','≈','≡','•','∎','☣','☠','✦','✪','✶','⨀']
+    glitched_lines = []
+    for line in banner_text.splitlines():
+        new_line = ""
+        for char in line:
+            if char != " " and random.random() < glitch_prob:
+                new_line += random.choice(glitch_chars)
+            else:
+                new_line += char
+        glitched_lines.append(new_line)
+    return "\n".join(glitched_lines)
 
+# Select a random banner
+selected = random.choice(banners_with_subtitles)
+glitched_banner_text = Text(glitch_banner(selected["banner"]), style="bold red")
+subtitle_text = Text(selected["subtitle"], style="bold bright_cyan")
+
+# Display banner panel
+console.print(Panel(glitched_banner_text, subtitle=subtitle_text, expand=False, border_style="bright_magenta"))
+
+# -------------------
 # CLI input
 sender_name = console.input("[bold cyan]Sender Name:[/bold cyan] ")
 sender_email = console.input("[bold cyan]Sender Email:[/bold cyan] ")
@@ -38,14 +103,13 @@ body = "\n".join(lines)
 
 # Create MIME message
 msg = MIMEMultipart()
-# From header: maximum visibility
 msg['From'] = f"{sender_name} <{sender_email}>"
 msg['To'] = receiver_email
 msg['Subject'] = subject
 msg.attach(MIMEText(body, 'html'))
 
+# Send email via Gmail SMTP
 try:
-    # Gmail SMTP
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(sender_email, sender_password)
